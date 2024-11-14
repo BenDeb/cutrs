@@ -1,5 +1,6 @@
 use clap::Parser;
 use core::panic;
+use std::fmt::Write as _;
 use std::fs::File;
 use std::io::BufRead;
 use std::io::BufReader;
@@ -47,7 +48,6 @@ pub fn open(path: PathBuf) -> Result<BufReader<File>, std::io::Error> {
     let file = BufReader::new(File::open(path)?);
     Ok(file)
 }
-use std::fmt::Write as _;
 
 pub fn cut(file: &mut BufReader<File>, fields: Vec<usize>, delimiter: Option<String>) {
     // Used to store the lines of the file
