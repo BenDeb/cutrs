@@ -51,29 +51,29 @@ pub fn open(path: PathBuf) -> Result<BufReader<File>, std::io::Error> {
 
 pub fn cut(file: &mut BufReader<File>, fields: Vec<usize>, delimiter: Option<String>) {
     // Used to store the lines of the file
-    let mut buf = String::new();
-    let mut line;
+    let mut line_buf = String::new();
     // Used to store the extracted field values
     let mut field_buf = String::new();
+
+    let mut line;
+
     // Formatting the output, so it looks like Unix cut
     let width = 7;
     loop {
-        line = file.read_line(&mut buf).unwrap();
+        line = file.read_line(&mut line_buf).unwrap();
         if line == 0 {
             break;
         }
-        // let cuts: Vec<&str>;
         let cuts: Vec<&str> = match &delimiter {
-            Some(d) => buf.split(d.as_str()).collect(),
-            None => buf.split_whitespace().collect(),
+            Some(d) => line_buf.split(d.as_str()).collect(),
+            None => line_buf.split_whitespace().collect(),
         };
         dbg!(&cuts);
-        // let mut blb = String::new();
         for field in &fields {
             write!(field_buf, "{:width$} ", cuts[*field - 1]).unwrap();
         }
         writeln!(field_buf).unwrap();
-        buf.clear();
+        line_buf.clear();
     }
     println!("{field_buf}");
 }
