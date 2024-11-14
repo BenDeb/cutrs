@@ -1,3 +1,8 @@
+use clap::Parser;
+use cutrs::{run, Cli, Config};
 fn main() {
-    println!("Hello, world!");
+    let args = Cli::parse();
+
+    let conf = Config::build(args);
+    run(conf);
 }
